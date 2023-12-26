@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 
-import Dashboard from "./components/Dashboard/Dashboard";
-import Login from "./components/Login/Login";
-import Signup from "./components/Signup/Signup";
+import Dashboard from "./components/Dashboard";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
 
 function App() {
   const user: string | null = localStorage.getItem("token");
