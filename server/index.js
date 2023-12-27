@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 // routes
+app.get("/", (req, res) => res.status(200).json({ message: "Server is connected!" }));
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
