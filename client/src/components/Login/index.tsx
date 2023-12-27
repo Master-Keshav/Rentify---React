@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios, { AxiosError } from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./index.scss";
 
 type UserData = {
@@ -25,7 +25,6 @@ const handleErrorsPostAuth = (error: AxiosError<MyErrorResponse>) => {
 const Login: React.FC = () => {
     const [data, setData] = useState<UserData>({ email: "", password: "" });
     const [error, setError] = useState<string | undefined>(undefined);
-    const navigate = useNavigate();
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setData({ ...data, [e.target.name]: e.target.value });
@@ -37,7 +36,7 @@ const Login: React.FC = () => {
             const url = "http://localhost:8080/api/auth";
             const { data: res } = await axios.post(url, data);
             localStorage.setItem("token", res.data);
-            navigate("/");
+            window.location.href = "/";
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
