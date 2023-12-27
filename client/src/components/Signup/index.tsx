@@ -20,6 +20,7 @@ const Signup: React.FC = () => {
     const [error, setError] = useState<string | undefined>(undefined);
     const navigate = useNavigate();
 
+    const host: string = `${window.location.protocol}//${window.location.hostname}:8080`;
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
@@ -27,7 +28,7 @@ const Signup: React.FC = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
-            const url = "http://localhost:8080/api/users";
+            const url = `${host}/api/users`;
             const { data: res } = await axios.post(url, data);
             navigate("/login");
             console.log(res.message);

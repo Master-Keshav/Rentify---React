@@ -26,6 +26,7 @@ const Login: React.FC = () => {
     const [data, setData] = useState<UserData>({ email: "", password: "" });
     const [error, setError] = useState<string | undefined>(undefined);
 
+    const host: string = `${window.location.protocol}//${window.location.hostname}:8080`;
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
@@ -33,7 +34,7 @@ const Login: React.FC = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
-            const url = "http://localhost:8080/api/auth";
+            const url = `${host}/api/auth`;
             const { data: res } = await axios.post(url, data);
             localStorage.setItem("token", res.data);
             window.location.href = "/";
