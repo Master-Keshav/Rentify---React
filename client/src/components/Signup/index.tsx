@@ -20,7 +20,7 @@ const Signup: React.FC = () => {
     const [error, setError] = useState<string | undefined>(undefined);
     const navigate = useNavigate();
 
-    const host: string = `${window.location.protocol}//${window.location.hostname}:8080`;
+    const host = import.meta.env.VITE_API_HOST as string;
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
