@@ -12,14 +12,7 @@
   ],
   "routes": [
     {
-      "src": "/(.*).(json|ico)",
-      "dest": "/rentify/client/$1.$2",
-      "headers": {
-        "Cache-Control": "s-maxage=31536000,immutable"
-      }
-    },
-    {
-      "src": "/(.*)",
+      "src": "/.*",
       "dest": "/rentify/client/index.html"
     }
   ]

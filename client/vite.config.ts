@@ -7,9 +7,9 @@
 // })
 
 // rentify/client/vite.config.ts
-import react from '@vitejs/plugin-react'
+import react from "@vitejs/plugin-react";
 
 export default {
-  base: '/rentify/client/',
+  base: "/rentify/client/",
   plugins: [react()],
-}
+};
