@@ -2,21 +2,25 @@
   "version": 2,
   "builds": [
     {
-      "src": "vite.config.js",
+      "src": "rentify/client/vite.config.ts",
       "use": "@vercel/node"
     },
     {
-      "src": "public/**/*",
+      "src": "rentify/client/public/**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "handle": "filesystem"
+      "src": "/(.*).(json|ico)",
+      "dest": "/rentify/client/$1.$2",
+      "headers": {
+        "Cache-Control": "s-maxage=31536000,immutable"
+      }
     },
     {
-      "src": "/.*",
-      "dest": "/index.html"
+      "src": "/(.*)",
+      "dest": "/rentify/client/index.html"
     }
   ]
 }
