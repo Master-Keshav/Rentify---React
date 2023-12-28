@@ -2,18 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "rentify/client/vite.config.ts",
+      "src": "client/vite.config.ts",
       "use": "@vercel/node"
     },
     {
-      "src": "rentify/client/public/**/*",
+      "src": "client/public/**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/.*",
-      "dest": "/rentify/client/index.html"
+      "dest": "/client/index.html"
     }
   ]
 }
