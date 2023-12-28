@@ -10,6 +10,6 @@
 import react from "@vitejs/plugin-react";
 
 export default {
-  base: "/rentify/client/",
+  base: "/",
   plugins: [react()],
 };
