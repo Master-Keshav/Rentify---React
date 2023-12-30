@@ -1,8 +1,8 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import axios, { AxiosError } from "axios";
 import { Link } from "react-router-dom";
 import "./index.scss";
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin, googleLogout } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 
 type UserData = {
@@ -51,6 +51,12 @@ const handleErrorsPostAuth = (error: AxiosError<MyErrorResponse>) => {
 const Login: React.FC = () => {
     const [data, setData] = useState<UserData>({ email: "", password: "" });
     const [error, setError] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        googleLogout();
+        localStorage.clear()
+    }, [])
+
 
     const host = import.meta.env.VITE_API_HOST as string;
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
