@@ -2,6 +2,8 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios, { AxiosError } from "axios";
 import { Link } from "react-router-dom";
 import "./index.scss";
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
 
 type UserData = {
     email: string;
@@ -11,6 +13,30 @@ type UserData = {
 type MyErrorResponse = {
     errors: { detail: string }[];
 };
+
+interface CredentialResponse {
+    clientId: string;
+    credential: string;
+    select_by: string;
+}
+
+interface CredentialResponseDecoded {
+    aud: string;
+    azp: string;
+    email: string;
+    email_verified: boolean;
+    exp: number;
+    family_name: string;
+    given_name: string;
+    iat: number;
+    iss: string;
+    jti: string;
+    locale: string;
+    name: string;
+    nbf: number;
+    picture: string;
+    sub: string;
+}
 
 const handleErrorsPostAuth = (error: AxiosError<MyErrorResponse>) => {
     if (error.isAxiosError && error.response) {
@@ -59,6 +85,17 @@ const Login: React.FC = () => {
         }
     };
 
+    const onGoogleSuccess = (credentialResponse: CredentialResponse): void => {
+        const credentialResponseDecoded: CredentialResponseDecoded | undefined = credentialResponse.credential ?
+            jwtDecode(credentialResponse.credential) : undefined
+
+        if (credentialResponseDecoded?.email_verified) {
+            console.log(credentialResponseDecoded);
+            localStorage.setItem("token", credentialResponseDecoded.jti);
+            window.location.href = "/";
+        }
+    };
+
     return (
         <div className={"login_container"}>
             <div className={"login_form_container"}>
@@ -91,6 +128,14 @@ const Login: React.FC = () => {
                             Sign In
                         </button>
                     </form>
+                    <div className="google-login">
+                        <GoogleLogin
+                            onSuccess={(credentialResponse: any) => onGoogleSuccess(credentialResponse)}
+                            onError={() => {
+                                console.log('Login Failed');
+                            }}
+                        />
+                    </div>
                 </div>
                 <div className={"right"}>
                     <h1>New Here ?</h1>
