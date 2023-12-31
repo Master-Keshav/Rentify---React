@@ -6,7 +6,7 @@ import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 
-function App() {
+const App = () => {
     const user: string | null = localStorage.getItem("token");
     const clientId: string | any = import.meta.env.VITE_GOOGLE_CLIENT_ID
 

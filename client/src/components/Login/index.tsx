@@ -1,9 +1,13 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+
 import axios, { AxiosError } from "axios";
-import { Link } from "react-router-dom";
-import "./index.scss";
-import { GoogleLogin, googleLogout } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
+import { Link } from "react-router-dom";
+import { GoogleLogin, googleLogout } from '@react-oauth/google';
+import { useDispatch } from 'react-redux';
+
+import "./index.scss";
+import { setUser } from '../../actions/userActions';
 
 type UserData = {
     email: string;
@@ -49,6 +53,8 @@ const handleErrorsPostAuth = (error: AxiosError<MyErrorResponse>) => {
 };
 
 const Login: React.FC = () => {
+    const dispatch = useDispatch();
+
     const [data, setData] = useState<UserData>({ email: "", password: "" });
     const [error, setError] = useState<string | undefined>(undefined);
 
@@ -56,7 +62,6 @@ const Login: React.FC = () => {
         googleLogout();
         localStorage.clear()
     }, [])
-
 
     const host = import.meta.env.VITE_API_HOST as string;
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -69,6 +74,7 @@ const Login: React.FC = () => {
             const url = `${host}/api/auth`;
             const { data: res } = await axios.post(url, data);
             localStorage.setItem("token", res.data);
+            dispatch(setUser(res.data.user));
             window.location.href = "/";
         } catch (err) {
             if (err instanceof Error) {
