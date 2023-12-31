@@ -73,7 +73,7 @@ const Login: React.FC = () => {
         try {
             const url = `${host}/api/auth`;
             const { data: res } = await axios.post(url, data);
-            localStorage.setItem("token", res.data);
+            localStorage.setItem("token", res.data.token);
             dispatch(setUser(res.data.user));
             window.location.href = "/";
         } catch (err) {
