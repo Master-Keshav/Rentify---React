@@ -4,10 +4,8 @@ import axios, { AxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
-import { useDispatch } from 'react-redux';
 
 import "./index.scss";
-import { setUser } from '../../actions/userActions';
 
 type UserData = {
     email: string;
@@ -53,7 +51,6 @@ const handleErrorsPostAuth = (error: AxiosError<MyErrorResponse>) => {
 };
 
 const Login: React.FC = () => {
-    const dispatch = useDispatch();
 
     const [data, setData] = useState<UserData>({ email: "", password: "" });
     const [error, setError] = useState<string | undefined>(undefined);
