@@ -71,10 +71,9 @@ const Login: React.FC = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
-            const url = `${host}/api/auth`;
+            const url = `${host}/api/login`;
             const { data: res } = await axios.post(url, data);
             localStorage.setItem("token", res.data.token);
-            dispatch(setUser(res.data.user));
             window.location.href = "/";
         } catch (err) {
             if (err instanceof Error) {

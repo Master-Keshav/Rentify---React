@@ -23,13 +23,7 @@ router.post("/", async (req, res) => {
 		const token = user.generateAuthToken();
 		res.status(200).send({
 			data: {
-				token,
-				user: {
-					_id: user._id,
-					firstName: user.firstName,
-					lastName: user.lastName,
-					email: user.email,
-				},
+				token
 			},
 			message: "logged in successfully",
 		});

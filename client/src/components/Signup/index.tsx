@@ -28,7 +28,7 @@ const Signup: React.FC = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
-            const url = `${host}/api/users`;
+            const url = `${host}/api/signup`;
             const { data: res } = await axios.post(url, data);
             navigate("/login");
             console.log(res.message);
