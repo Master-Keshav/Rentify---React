@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios, { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import "./index.scss";
+import "./Signup.scss";
 
 type UserData = {
     firstName: string;

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { setUser } from '../../actions/userActions';
+import { setUser } from '../actions/userActions';
 import axios from 'axios';
 
-const Dashboard: React.FC = (props: any) => {
+const Home: React.FC = (props: any) => {
     const host = import.meta.env.VITE_API_HOST as string;
 
     useEffect(() => {
@@ -27,11 +27,13 @@ const Dashboard: React.FC = (props: any) => {
 
     const role = props.user.role;
     return (
-        <div className="dashboard-container">
-            <h1>Dashboard Page</h1>
-            <p>Welcome to the Dashboard page!</p>
-            {role === "admin" && <p>This is admin-related content</p>}
-        </div>
+        <>
+            <div className="dashboard-container">
+                <h1>Dashboard Page</h1>
+                <p>Welcome to the Dashboard page!</p>
+                {role === "admin" && <p>This is admin-related content</p>}
+            </div>
+        </>
     );
 };
 
@@ -47,4 +49,4 @@ const mapDispatchToProps = (dispatch: any) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

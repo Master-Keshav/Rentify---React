@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
 
-import "./index.scss";
+import "./Login.scss";
 
 type UserData = {
     email: string;
