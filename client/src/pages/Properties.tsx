@@ -29,8 +29,8 @@ const Home: React.FC = (props: any) => {
     return (
         <>
             <div className="dashboard-container">
-                <h1>Dashboard Page</h1>
-                <p>Welcome to the Dashboard page!</p>
+                <h1>Properties Page</h1>
+                <p>Welcome to the Properties page!</p>
                 {role === "admin" && <p>This is admin-related content</p>}
             </div>
         </>

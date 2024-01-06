@@ -1,41 +1,62 @@
-import { NavLink } from "react-router-dom";
-import { FaBars, FaHome, FaUser } from "react-icons/fa";
-import { MdMessage } from "react-icons/md";
-import { BiSearch } from "react-icons/bi";
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import SidebarMenu from "./SidebarMenu";
+import React, { useState } from 'react';
+
+import { NavLink } from 'react-router-dom';
+import { FaBars, FaUser } from 'react-icons/fa';
+import { MdMessage } from 'react-icons/md';
+import { BiSearch } from 'react-icons/bi';
+import { AnimatePresence, motion } from 'framer-motion';
+
+import { TbBuildingPavilion } from "react-icons/tb";
+import { IoMdPeople } from "react-icons/io";
+import { VscOpenPreview } from "react-icons/vsc";
+import { RiLogoutBoxLine } from "react-icons/ri";
+
 import logo from '../../assets/logo.png';
+import './Sidebar.scss';
 
 interface RouteItem {
     path: string;
     name: string;
     icon: React.ReactNode;
-    exact?: boolean;
-    subRoutes?: RouteItem[];
 }
 
 const routes: RouteItem[] = [
     {
-        path: "/",
-        name: "Home",
-        icon: <FaHome />,
+        path: '/',
+        name: 'Properties',
+        icon: <TbBuildingPavilion />,
     },
     {
-        path: "/users",
-        name: "Users",
+        path: '/agencies',
+        name: 'Agencies',
+        icon: <IoMdPeople />,
+    },
+    {
+        path: '/reviews',
+        name: 'Reviews',
+        icon: <VscOpenPreview />,
+    },
+    {
+        path: '/messages',
+        name: 'Messages',
+        icon: <MdMessage />,
+    },
+    {
+        path: '/user',
+        name: 'My Profile',
         icon: <FaUser />,
     },
     {
-        path: "/messages",
-        name: "Messages",
-        icon: <MdMessage />,
-    }
+        path: '/logout',
+        name: 'Logout',
+        icon: <RiLogoutBoxLine />,
+    },
 ];
 
-const SideBar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const SideBar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
+
     const inputAnimation = {
         hidden: {
             width: 0,
@@ -45,8 +66,8 @@ const SideBar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             },
         },
         show: {
-            width: "140px",
-            padding: "5px 15px",
+            width: '140px',
+            padding: '5px 15px',
             transition: {
                 duration: 0.2,
             },
@@ -63,7 +84,7 @@ const SideBar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         },
         show: {
             opacity: 1,
-            width: "auto",
+            width: 'auto',
             transition: {
                 duration: 0.5,
             },
@@ -71,99 +92,73 @@ const SideBar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     };
 
     return (
-        <>
-            <div className="main-container">
-                <motion.div
-                    animate={{
-                        width: isOpen ? "200px" : "45px",
-                        transition: {
-                            duration: 0.5,
-                            type: "spring",
-                            damping: 10,
-                        },
-                    }}
-                    className={`sidebar `}
-                >
-                    <div className="top_section">
+        <div className="sidebar">
+            <div className="top-section">
+                <div className="logo">
+                    <AnimatePresence>
+                        {isOpen && (
+                            <motion.h1
+                                variants={showAnimation}
+                                initial="hidden"
+                                animate="show"
+                                exit="hidden"
+                            >
+                                <img src={logo} alt="Rentify" />
+                            </motion.h1>
+                        )}
+                    </AnimatePresence>
+                </div>
+                <div className="bars">
+                    <FaBars onClick={toggle} />
+                </div>
+            </div>
+
+            <div className="search-section">
+                <div className="search-icon">
+                    <BiSearch onClick={!isOpen ? toggle : null} />
+                </div>
+                <div className="search-box">
+                    <AnimatePresence>
+                        {isOpen && (
+                            <motion.input
+                                initial="hidden"
+                                animate="show"
+                                exit="hidden"
+                                variants={inputAnimation}
+                                type="text"
+                                placeholder="Search Property"
+                                className="search-box-input"
+                            />
+                        )}
+                    </AnimatePresence>
+                </div>
+            </div>
+
+            <section className="routes">
+                {routes.map((route, index) => (
+                    <NavLink
+                        key={index}
+                        to={route.path}
+                        className="link"
+                    >
+                        <div className="icon">{route.icon}</div>
                         <AnimatePresence>
                             {isOpen && (
-                                <motion.h1
+                                <motion.div
                                     variants={showAnimation}
                                     initial="hidden"
                                     animate="show"
                                     exit="hidden"
-                                    className="logo"
+                                    className="text"
                                 >
-                                    <img src={logo} alt="Rentify" />
-                                </motion.h1>
+                                    {route.name}
+                                </motion.div>
                             )}
                         </AnimatePresence>
-
-                        <div className="bars">
-                            <FaBars onClick={toggle} />
-                        </div>
-                    </div>
-                    <div className="search">
-                        <div className="search_icon">
-                            <BiSearch onClick={!isOpen ? toggle : null} />
-                        </div>
-                        <AnimatePresence>
-                            {isOpen && (
-                                <motion.input
-                                    initial="hidden"
-                                    animate="show"
-                                    exit="hidden"
-                                    variants={inputAnimation}
-                                    type="text"
-                                    placeholder="Search"
-                                />
-                            )}
-                        </AnimatePresence>
-                    </div>
-                    <section className="routes">
-                        {routes.map((route, index) => {
-                            if (route.subRoutes) {
-                                return (
-                                    <SidebarMenu
-                                        key={index}
-                                        setIsOpen={setIsOpen}
-                                        route={route}
-                                        showAnimation={showAnimation}
-                                        isOpen={isOpen}
-                                    />
-                                );
-                            }
-
-                            return (
-                                <NavLink
-                                    key={index}
-                                    to={route.path}
-                                    className="link"
-                                // className={`link ${window.location.pathname === route.path ? 'active' : ''}`}
-                                >
-                                    <div className="icon">{route.icon}</div>
-                                    <AnimatePresence>
-                                        {isOpen && (
-                                            <motion.div
-                                                variants={showAnimation}
-                                                initial="hidden"
-                                                animate="show"
-                                                exit="hidden"
-                                                className="link_text"
-                                            >
-                                                {route.name}
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </NavLink>
-                            );
-                        })}
-                    </section>
-                </motion.div>
-
-                <main>{children}</main>
-            </div>
-        </>
+                    </NavLink>
+                ))}
+            </section>
+        </div>
     );
 };
 
