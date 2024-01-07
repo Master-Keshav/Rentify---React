@@ -1,52 +1,7 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { setUser } from '../actions/userActions';
-import axios from 'axios';
-
-const Home: React.FC = (props: any) => {
-    const host = import.meta.env.VITE_API_HOST as string;
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const url = `${host}/api/user`;
-                const response = await axios.get(url, {
-                    headers: {
-                        'x-auth-token': localStorage.getItem('token'),
-                    },
-                });
-
-                props.setUser(response.data);
-            } catch (error) {
-                console.error('Error fetching user:', error);
-            }
-        };
-
-        fetchUser();
-    }, []);
-
-    const role = props.user.role;
+const Properties = () => {
     return (
-        <>
-            <div className="dashboard-container">
-                <h1>Properties Page</h1>
-                <p>Welcome to the Properties page!</p>
-                {role === "admin" && <p>This is admin-related content</p>}
-            </div>
-        </>
-    );
-};
+        <div className="title">Properties</div>
+    )
+}
 
-const mapStateToProps = (state: any) => {
-    return {
-        user: state.user.user,
-    };
-};
-
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        setUser: (user: any) => dispatch(setUser(user)),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Properties

@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import Agencies from '../../pages/Agencies'
+import Dashboard from '../../pages/Dashboard';
 import Messages from '../../pages/Messages';
 import Navbar from '../Navbar/Navbar';
 import Properties from '../../pages/Properties';
 import Reviews from '../../pages/Reviews';
 import SideBar from '../SideBar/Sidebar';
 import User from '../../pages/User';
-import './Dashboard.css';
+import './Home.css';
 
-const Dashboard = () => {
+const Home = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleLogout = () => {
@@ -36,7 +37,8 @@ const Dashboard = () => {
                     </div>
                     <div className="page">
                         <Routes>
-                            <Route path="/" element={<Properties />} />
+                            <Route path="/" element={<Dashboard />} />
+                            <Route path="/properties" element={<Properties />} />
                             <Route path="/agencies" element={<Agencies />} />
                             <Route path="/reviews" element={<Reviews />} />
                             <Route path="/user" element={<User />} />
@@ -49,4 +51,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default Home;

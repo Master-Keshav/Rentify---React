@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { NavLink } from 'react-router-dom';
-import { FaBars, FaUser } from 'react-icons/fa';
-import { MdMessage } from 'react-icons/md';
-import { BiSearch } from 'react-icons/bi';
 import { AnimatePresence, motion } from 'framer-motion';
-
-import { TbBuildingPavilion } from "react-icons/tb";
+import { BiSearch } from 'react-icons/bi';
+import { FaBars, FaUser } from 'react-icons/fa';
 import { IoMdPeople } from "react-icons/io";
-import { VscOpenPreview } from "react-icons/vsc";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { MdMessage } from 'react-icons/md';
+import { NavLink } from 'react-router-dom';
 import { RiLogoutBoxLine } from "react-icons/ri";
+import { TbBuildingPavilion } from "react-icons/tb";
+import { VscOpenPreview } from "react-icons/vsc";
 
 import logo from '../../assets/logo.png';
 import './Sidebar.scss';
@@ -23,6 +23,11 @@ interface RouteItem {
 const routes: RouteItem[] = [
     {
         path: '/',
+        name: 'Dashboard',
+        icon: <LuLayoutDashboard />,
+    },
+    {
+        path: '/properties',
         name: 'Properties',
         icon: <TbBuildingPavilion />,
     },

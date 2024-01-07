@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
-import Dashboard from "./components/Dashboard/Dashboard";
+import Dashboard from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 
