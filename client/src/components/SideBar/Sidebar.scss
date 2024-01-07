@@ -43,7 +43,7 @@
     }
 
     .search-box-input {
-        text-align: center;
+        text-align: start;
         border-radius: 0.4rem;
     }
 }
@@ -79,8 +79,6 @@
             font-weight: bolder;
             transition: 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);
         }
-
-        .icon {}
 
         .text {
             font-size: 0.9rem;
