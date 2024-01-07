@@ -1,25 +1,55 @@
 import { useState } from 'react';
-import './Navbar.scss';
+import { AnimatePresence, motion } from 'framer-motion';
+
 import Dropdown from './Dropdown';
 import logo from "../../assets/logo.png"
+import './Navbar.scss';
 
-interface DropdownProps {
-    handleLogout: () => void
+interface NavbarProps {
+    handleLogout: () => void,
+    isOpen: boolean
 }
 
-const Navbar: React.FC<DropdownProps> = (props) => {
-    const { handleLogout } = props
+const Navbar: React.FC<NavbarProps> = (props) => {
+    const { handleLogout, isOpen } = props
     const [isDropdownOpen, setDropdownOpen] = useState(false);
 
     const handleDropdownToggle = () => {
         setDropdownOpen(!isDropdownOpen);
     };
 
+    const showAnimation = {
+        hidden: {
+            width: 0,
+            opacity: 0,
+            transition: {
+                duration: 0.6,
+            },
+        },
+        show: {
+            opacity: 1,
+            width: 'auto',
+            transition: {
+                duration: 0.6,
+            },
+        },
+    };
 
     return (
         <div className="navbar">
             <div className="logo">
-                <img src={logo} alt="logo" />
+                <AnimatePresence>
+                    {!isOpen && (
+                        <motion.h1
+                            variants={showAnimation}
+                            initial="hidden"
+                            animate="show"
+                            exit="hidden"
+                        >
+                            <img src={logo} alt="Rentify" />
+                        </motion.h1>
+                    )}
+                </AnimatePresence>
             </div>
             <div className="user">
                 <div className="user-email">

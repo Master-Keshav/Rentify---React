@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import Agencies from '../../pages/Agencies'
@@ -10,6 +11,7 @@ import User from '../../pages/User';
 import './Dashboard.css';
 
 const Dashboard = () => {
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleLogout = () => {
         localStorage.removeItem("token")
@@ -20,11 +22,17 @@ const Dashboard = () => {
         <>
             <div className="main-container">
                 <div className="sidebar-container">
-                    <SideBar />
+                    <SideBar
+                        isOpen={isOpen}
+                        setIsOpen={setIsOpen}
+                    />
                 </div>
                 <div className="page-container">
                     <div className="navbar">
-                        <Navbar handleLogout={handleLogout} />
+                        <Navbar
+                            handleLogout={handleLogout}
+                            isOpen={isOpen}
+                        />
                     </div>
                     <div className="page">
                         <Routes>

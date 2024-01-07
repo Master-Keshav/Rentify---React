@@ -53,8 +53,13 @@ const routes: RouteItem[] = [
     },
 ];
 
-const SideBar: React.FC = () => {
-    const [isOpen, setIsOpen] = useState(false);
+interface SidebarProps {
+    isOpen: boolean,
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const SideBar: React.FC<SidebarProps> = (props) => {
+    const { isOpen, setIsOpen } = props;
     const toggle = () => setIsOpen(!isOpen);
 
     const inputAnimation = {
@@ -62,14 +67,14 @@ const SideBar: React.FC = () => {
             width: 0,
             padding: 0,
             transition: {
-                duration: 0.2,
+                duration: 0.6,
             },
         },
         show: {
             width: '140px',
             padding: '5px 15px',
             transition: {
-                duration: 0.2,
+                duration: 0.6,
             },
         },
     };
@@ -79,14 +84,14 @@ const SideBar: React.FC = () => {
             width: 0,
             opacity: 0,
             transition: {
-                duration: 0.5,
+                duration: 0.3,
             },
         },
         show: {
             opacity: 1,
             width: 'auto',
             transition: {
-                duration: 0.5,
+                duration: 0.3,
             },
         },
     };
