@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
-import Dashboard from "./components/Home/Home";
+import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 
@@ -16,7 +16,7 @@ const App = () => {
                 <Routes>
                     {user ? (
                         <>
-                            <Route path="*" element={<Dashboard />} />
+                            <Route path="*" element={<Home />} />
                             <Route path="/signup" element={<Navigate to="/" />} />
                             <Route path="/login" element={<Navigate to="/" />} />
                         </>

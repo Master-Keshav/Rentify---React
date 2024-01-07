@@ -29,7 +29,7 @@ const Home = () => {
                     />
                 </div>
                 <div className="page-container">
-                    <div className="navbar">
+                    <div>
                         <Navbar
                             handleLogout={handleLogout}
                             isOpen={isOpen}
