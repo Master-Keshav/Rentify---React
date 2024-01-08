@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 
+import Bargraph from '../components/Charts/Bargraph';
 import Donut from '../components/Charts/Donut';
+import Line from '../components/Charts/Line'
 import "./index.scss"
 
 const Dashboard = () => {
@@ -10,7 +12,7 @@ const Dashboard = () => {
 
     }, []);
 
-    const chartProps = [
+    const donutChartProps = [
         {
             labels: ["Sale", "Others"],
             series: [684, 1000 - 684]
@@ -29,6 +31,20 @@ const Dashboard = () => {
         }
     ]
 
+    const barChartProps = {
+        lastMonthData: [1000, 1500, 800, 1200, 2000, 2500, 1800],
+        currentMonthData: [1200, 1800, 900, 1100, 2200, 3000, 2500],
+        categories: ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'],
+    }
+
+    const progressBars = [
+        { bgcolor: 'orange', progress: '30', name: "Social Media" },
+        { bgcolor: 'red', progress: '60', name: "Marketplace" },
+        { bgcolor: '#99ff66', progress: '50', name: "Websites" },
+        { bgcolor: '#ff00ff', progress: '85', name: "Digital Ads" },
+        { bgcolor: '#99ccff', progress: '95', name: "Others" },
+    ];
+
     return (
         <>
             <div className="container">
@@ -36,7 +52,7 @@ const Dashboard = () => {
                     Dashboard
                 </div>
                 <div className="single-charts">
-                    {chartProps.map((chart, index) => (
+                    {donutChartProps.map((chart, index) => (
                         <div key={index} className={`${chart.labels[0].toLowerCase()} card`}>
                             <div>
                                 <div className="card-title">
@@ -51,7 +67,31 @@ const Dashboard = () => {
                     ))}
                 </div>
                 <div className="multiple-charts">
-
+                    <div className="revenue card">
+                        <div className="card-title">
+                            Total Revenue
+                        </div>
+                        <div className="card-details">
+                            <div className="amount">
+                                $236,535
+                            </div>
+                        </div>
+                        <div className="card-chart">
+                            <Bargraph
+                                lastMonthData={barChartProps.lastMonthData}
+                                currentMonthData={barChartProps.currentMonthData}
+                                categories={barChartProps.categories}
+                            />
+                        </div>
+                    </div>
+                    <div className="referral card">
+                        <div className="card-title">
+                            Property Referrals
+                        </div>
+                        <div className="card-chart">
+                            <Line bars={progressBars} />
+                        </div>
+                    </div>
                 </div>
             </div >
         </>
