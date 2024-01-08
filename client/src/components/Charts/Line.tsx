@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface LineProps {
     name: string;
@@ -8,15 +8,19 @@ interface LineProps {
 
 const SingleLine: React.FC<LineProps> = (props) => {
     const { name, bgcolor, progress } = props;
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        setLoaded(true);
+    }, []);
 
     return (
-        <div className="progress-bar">
+        <div className={`progress-bar ${loaded ? 'fade-in' : ''}`}>
             <div className="info">
                 <div>{name}</div>
                 <div>{progress}%</div>
             </div>
-            <div className="bar" style={{ width: `${progress}%`, backgroundColor: bgcolor }}>
-            </div>
+            <div className="bar" style={{ width: `${progress}%`, backgroundColor: bgcolor }}></div>
         </div>
     );
 };
