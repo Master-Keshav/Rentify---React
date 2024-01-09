@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import Agencies from '../../pages/Agencies'
+import CreateProperty from '../../pages/CreateProperty';
 import Dashboard from '../../pages/Dashboard';
 import Messages from '../../pages/Messages';
 import Navbar from '../Navbar/Navbar';
@@ -39,6 +40,7 @@ const Home = () => {
                         <Routes>
                             <Route path="/" element={<Dashboard />} />
                             <Route path="/properties" element={<Properties />} />
+                            <Route path="/properties/create" element={<CreateProperty />} />
                             <Route path="/agencies" element={<Agencies />} />
                             <Route path="/reviews" element={<Reviews />} />
                             <Route path="/user" element={<User />} />
