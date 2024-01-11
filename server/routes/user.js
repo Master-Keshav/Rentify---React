@@ -11,6 +11,7 @@ router.get("/", async (req, res) => {
 		const user = await User.findById(decoded._id);
 		if (!user) return res.status(404).send({ 'message': 'User not found.' });
 		const userDetails = {
+			'_id': user.id,
 			'firstName': user.firstName,
 			'lastName': user.lastName,
 			'email': user.email,

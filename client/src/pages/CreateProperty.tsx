@@ -1,20 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from 'react-redux';
+import { setUser } from '../actions/userActions';
+import axios from "axios";
 
-const CreateProperty: React.FC = () => {
+const CreateProperty: React.FC = (props: any) => {
+    const host = import.meta.env.VITE_API_HOST as string;
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const url = `${host}/api/user`;
+                const response = await axios.get(url, {
+                    headers: {
+                        'x-auth-token': localStorage.getItem('token'),
+                    },
+                });
+                props.setUser(response.data);
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+
+        fetchUser();
+    }, []);
+
     const [formData, setFormData] = useState({
-        propertyName: "",
-        description: "",
-        propertyType: "",
+        propertyName: '',
+        description: '',
+        propertyType: '',
         propertyPrice: 0,
-        location: "",
-        propertyPhoto: "",
-        contactNumber: "",
+        location: '',
+        propertyPhoto: '',
+        contactNumber: '',
         petFriendly: false,
         furnished: false,
-        multiInputValues: [] as string[],
-        multiInputCurrent: "",
+        facilities: [] as string[],
+        facility: '',
+        imageURL: '',
     });
 
+    const user_id = props.user._id
+    const [imageFile, setImageFile] = useState<File>();
     const facilityOptions = ["Park", "School", "Hospital", "Supermarket", "Security Guard", "Surveillance Camera"];
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -29,32 +55,87 @@ const CreateProperty: React.FC = () => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files && e.target.files[0];
         if (file) {
-            // Handle file upload logic here
-            console.log("File uploaded:", file);
+            console.log('File uploaded:', file);
+            setImageFile(file)
+        }
+        else {
+            console.log("File not uploaded!")
         }
     };
 
     const handleMultiInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setFormData((prevData) => ({
             ...prevData,
-            multiInputCurrent: e.target.value,
+            facility: e.target.value,
         }));
     };
 
     const handleMultiInputAdd = () => {
-        const { multiInputValues, multiInputCurrent } = formData;
-        if (multiInputCurrent.trim() !== "" && !multiInputValues.includes(multiInputCurrent)) {
+        const { facilities, facility } = formData;
+        if (facility.trim() !== "" && !facilities.includes(facility)) {
             setFormData((prevData) => ({
                 ...prevData,
-                multiInputValues: [...multiInputValues, multiInputCurrent],
-                multiInputCurrent: "",
+                facilities: [...facilities, facility],
+                facility: "",
             }));
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleImgBBUpload = async () => {
+        try {
+            const IMG_BB_API_KEY = import.meta.env.VITE_IMG_BB_API_KEY
+            if (imageFile) {
+                const formData = new FormData();
+                formData.append('key', IMG_BB_API_KEY);
+                formData.append('image', imageFile);
+
+                const response = await axios.post('https://api.imgbb.com/1/upload', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                if (response.data.success) {
+                    const imageUrl = response.data.data.url;
+                    setFormData((prevData) => ({
+                        ...prevData,
+                        imageURL: imageUrl,
+                    }));
+                } else {
+                    console.error('ImgBB upload failed. Response:', response.data);
+                }
+            } else {
+                console.error('No image file to upload.');
+            }
+        } catch (error) {
+            console.error('Error uploading image to ImgBB:', error);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Form submitted:", formData);
+        await handleImgBBUpload();
+        try {
+            let data = {
+                'user': user_id,
+                'name': formData.propertyName,
+                'description': formData.description,
+                'type': formData.propertyType,
+                'price': formData.propertyPrice,
+                'location': formData.location,
+                'imageURL': formData.imageURL,
+                'phone': formData.contactNumber,
+                'isPetFriendly': formData.petFriendly,
+                'isFurnished': formData.furnished,
+                'facilities': formData.facilities,
+            }
+            const url = `${host}/api/property/create`;
+            const { data: res } = await axios.post(url, data);
+            console.log("API response:", res.message);
+            // Optionally, you can reset the form or perform other actions after successful submission
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
     };
 
     return (
@@ -178,8 +259,8 @@ const CreateProperty: React.FC = () => {
                                 </div>
                                 <div className="label-input">
                                     <select
-                                        name="multiInputCurrent"
-                                        value={formData.multiInputCurrent}
+                                        name="facility"
+                                        value={formData.facility}
                                         onChange={handleMultiInputChange}
                                         style={{ height: '31px' }}
                                     >
@@ -206,7 +287,7 @@ const CreateProperty: React.FC = () => {
                                         readOnly
                                         placeholder="No Facilities Added"
                                         style={{ height: '2rem', width: '16rem' }}
-                                        value={formData.multiInputValues.join(", ")}
+                                        value={formData.facilities.join(", ")}
                                     />
                                 </div>
                             </div>
@@ -223,4 +304,16 @@ const CreateProperty: React.FC = () => {
     );
 };
 
-export default CreateProperty;
+const mapStateToProps = (state: any) => {
+    return {
+        user: state.user.user,
+    };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        setUser: (user: any) => dispatch(setUser(user)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateProperty);
