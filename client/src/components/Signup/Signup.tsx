@@ -8,6 +8,7 @@ type UserData = {
     lastName: string;
     email: string;
     password: string;
+    avatar: string;
 };
 
 const Signup: React.FC = () => {
@@ -16,11 +17,31 @@ const Signup: React.FC = () => {
         lastName: "",
         email: "",
         password: "",
+        avatar: "",
     });
+
     const [error, setError] = useState<string | undefined>(undefined);
     const navigate = useNavigate();
 
     const host = import.meta.env.VITE_API_HOST as string;
+
+    const generateRandomAvatar = async () => {
+        try {
+            let imageUrl;
+            let imageData;
+            do {
+                imageUrl = `https://random.dog/woof.json`;
+                const response = await axios.get(imageUrl);
+                imageData = response.data;
+            } while (!/\.(jpg|png)$/i.test(imageData.url));
+
+            return imageData.url;
+        } catch (error) {
+            console.error("Error fetching random image:", error);
+            return '';
+        }
+    };
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
@@ -29,7 +50,10 @@ const Signup: React.FC = () => {
         e.preventDefault();
         try {
             const url = `${host}/api/signup`;
-            const { data: res } = await axios.post(url, data);
+            const avatarURL = await generateRandomAvatar()
+            data.avatar = avatarURL
+            const updatedUserData = { ...data };
+            const { data: res } = await axios.post(url, updatedUserData);
             navigate("/login");
             console.log(res.message);
         } catch (err) {
