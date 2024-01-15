@@ -4,10 +4,37 @@
     flex-direction: column;
     flex-grow: 1;
 
+    .link {
+        color: #03293c;
+        text-decoration: none;
+    }
+
+    .link:hover {
+        color: #0fa3b1;
+        text-decoration: underline;
+    }
+
     .title {
         padding: 1rem;
         font-size: 2rem;
         font-weight: bold;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        text-align: center;
+
+        .create {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            flex: 0 0 20%;
+
+            .icon {
+                display: flex;
+                align-items: center;
+                font-size: 2.5rem;
+            }
+        }
     }
 
     .single-charts {
@@ -225,5 +252,4 @@
             }
         }
     }
-
 }
