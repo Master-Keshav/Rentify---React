@@ -1,5 +1,9 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import { connect } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+import axios from "axios";
+
+import { setUser } from '../../actions/userActions';
 
 import Agencies from '../../pages/Agencies'
 import CreateProperty from '../../pages/CreateProperty';
@@ -12,13 +16,35 @@ import SideBar from '../SideBar/Sidebar';
 import User from '../../pages/User';
 import './Home.css';
 
-const Home = () => {
+const Home: React.FC = (props: any) => {
+    const host = import.meta.env.VITE_API_HOST as string;
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const url = `${host}/api/user`;
+                const response = await axios.get(url, {
+                    headers: {
+                        'x-auth-token': localStorage.getItem('token'),
+                    },
+                });
+                props.setUser(response.data);
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+
+        fetchUser();
+    }, []);
+
     const [isOpen, setIsOpen] = useState(false);
 
     const handleLogout = () => {
         localStorage.removeItem("token")
         window.location.href = "/"
     };
+
+    const user_id = props.user._id
 
     return (
         <>
@@ -39,8 +65,8 @@ const Home = () => {
                     <div className="page">
                         <Routes>
                             <Route path="/" element={<Dashboard />} />
-                            <Route path="/properties" element={<Properties />} />
-                            <Route path="/properties/create" element={<CreateProperty />} />
+                            <Route path="/properties" element={<Properties user={user_id} />} />
+                            <Route path="/properties/create" element={<CreateProperty user={user_id} />} />
                             <Route path="/agencies" element={<Agencies />} />
                             <Route path="/reviews" element={<Reviews />} />
                             <Route path="/user" element={<User />} />
@@ -53,4 +79,16 @@ const Home = () => {
     );
 };
 
-export default Home;
+const mapStateToProps = (state: any) => {
+    return {
+        user: state.user.user,
+    };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        setUser: (user: any) => dispatch(setUser(user)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

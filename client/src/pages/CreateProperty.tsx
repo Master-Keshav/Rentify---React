@@ -1,28 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { connect } from 'react-redux';
-import { setUser } from '../actions/userActions';
+import React, { useState } from "react";
 import axios from "axios";
 
-const CreateProperty: React.FC = (props: any) => {
+interface CreatePropertyProps {
+    user: String,
+}
+
+const CreateProperty: React.FC<CreatePropertyProps> = (props) => {
     const host = import.meta.env.VITE_API_HOST as string;
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const url = `${host}/api/user`;
-                const response = await axios.get(url, {
-                    headers: {
-                        'x-auth-token': localStorage.getItem('token'),
-                    },
-                });
-                props.setUser(response.data);
-            } catch (error) {
-                console.error('Error fetching user:', error);
-            }
-        };
-
-        fetchUser();
-    }, []);
 
     const [formData, setFormData] = useState({
         propertyName: '',
@@ -37,7 +21,7 @@ const CreateProperty: React.FC = (props: any) => {
         imageURL: '',
     });
 
-    const user_id = props.user._id
+    const user_id = props.user
     const [imageFile, setImageFile] = useState<File>();
     const facilityOptions = ["Pet Friendly", "Furnished", "Park", "School", "Hospital", "Supermarket", "Security Guard", "Surveillance Camera"];
 
@@ -254,16 +238,4 @@ const CreateProperty: React.FC = (props: any) => {
     );
 };
 
-const mapStateToProps = (state: any) => {
-    return {
-        user: state.user.user,
-    };
-};
-
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        setUser: (user: any) => dispatch(setUser(user)),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateProperty);
+export default CreateProperty;

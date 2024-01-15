@@ -21,6 +21,10 @@
     flex-direction: row;
 }
 
+.sidebar-container {
+    background-color: #03293c;
+}
+
 .dashboard-container {
     background-color: #f0f0f0;
     padding: 20px;
