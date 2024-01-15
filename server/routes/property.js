@@ -18,8 +18,6 @@ router.post("/create", async (req, res) => {
             location,
             imageURL,
             phone,
-            isPetFriendly,
-            isFurnished,
             facilities,
         } = req.body;
 
@@ -32,11 +30,9 @@ router.post("/create", async (req, res) => {
             location,
             imageURL,
             phone,
-            isPetFriendly,
-            isFurnished,
             facilities,
         });
-        console.log(property)
+        
         await property.save();
 
         res.status(201).json({ message: "Property added successfully" });

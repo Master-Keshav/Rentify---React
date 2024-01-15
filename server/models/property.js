@@ -5,8 +5,6 @@ const propertySchema = new mongoose.Schema({
     description: { type: String, required: true },
     facilities: { type: [String], default: [] },
     imageURL: { type: String, required: true },
-    isFurnished: { type: Boolean, required: true },
-    isPetFriendly: { type: Boolean, required: true },
     location: { type: String, required: true },
     name: { type: String, required: true },
     price: { type: Number, required: true },
@@ -39,8 +37,6 @@ const validateProperty = (property) => {
         location: Joi.string().required(),
         imageURL: Joi.string().required(),
         phone: Joi.string().pattern(new RegExp(/\d{10}/)).required(),
-        isPetFriendly: Joi.boolean().required(),
-        isFurnished: Joi.boolean().required(),
         facilities: Joi.array().items(Joi.string()),
         user: Joi.string().required(),
     });

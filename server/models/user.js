@@ -2,20 +2,14 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
-const Property = require("./property")
 
 const userSchema = new mongoose.Schema({
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
 	email: { type: String, required: true },
 	password: { type: String, required: true },
-	role: { type: String, enum: ['user', 'admin'], default: 'user' }
-});
-
-userSchema.virtual("properties", {
-	ref: "Property",
-	localField: "_id",
-	foreignField: "user",
+	role: { type: String, enum: ['user', 'admin'], default: 'user' },
+	properties: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Property' }]
 });
 
 userSchema.methods.generateAuthToken = function () {

@@ -32,8 +32,6 @@ const CreateProperty: React.FC = (props: any) => {
         location: '',
         propertyPhoto: '',
         contactNumber: '',
-        petFriendly: false,
-        furnished: false,
         facilities: [] as string[],
         facility: '',
         imageURL: '',
@@ -41,15 +39,32 @@ const CreateProperty: React.FC = (props: any) => {
 
     const user_id = props.user._id
     const [imageFile, setImageFile] = useState<File>();
-    const facilityOptions = ["Park", "School", "Hospital", "Supermarket", "Security Guard", "Surveillance Camera"];
+    const facilityOptions = ["Pet Friendly", "Furnished", "Park", "School", "Hospital", "Supermarket", "Security Guard", "Surveillance Camera"];
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
-        const isChecked = type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: type === "checkbox" ? isChecked : value,
-        }));
+
+        if (type === "checkbox") {
+            const isChecked = (e.target as HTMLInputElement).checked;
+            setFormData((prevData) => {
+                if (isChecked) {
+                    return {
+                        ...prevData,
+                        facilities: [...prevData.facilities, name],
+                    };
+                } else {
+                    return {
+                        ...prevData,
+                        facilities: prevData.facilities.filter((facility) => facility !== name),
+                    };
+                }
+            });
+        } else {
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,24 +75,6 @@ const CreateProperty: React.FC = (props: any) => {
         }
         else {
             console.log("File not uploaded!")
-        }
-    };
-
-    const handleMultiInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            facility: e.target.value,
-        }));
-    };
-
-    const handleMultiInputAdd = () => {
-        const { facilities, facility } = formData;
-        if (facility.trim() !== "" && !facilities.includes(facility)) {
-            setFormData((prevData) => ({
-                ...prevData,
-                facilities: [...facilities, facility],
-                facility: "",
-            }));
         }
     };
 
@@ -101,6 +98,7 @@ const CreateProperty: React.FC = (props: any) => {
                         ...prevData,
                         imageURL: imageUrl,
                     }));
+                    return imageUrl
                 } else {
                     console.error('ImgBB upload failed. Response:', response.data);
                 }
@@ -114,7 +112,7 @@ const CreateProperty: React.FC = (props: any) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await handleImgBBUpload();
+        const imageURL = await handleImgBBUpload();
         try {
             let data = {
                 'user': user_id,
@@ -123,10 +121,8 @@ const CreateProperty: React.FC = (props: any) => {
                 'type': formData.propertyType,
                 'price': formData.propertyPrice,
                 'location': formData.location,
-                'imageURL': formData.imageURL,
+                'imageURL': imageURL,
                 'phone': formData.contactNumber,
-                'isPetFriendly': formData.petFriendly,
-                'isFurnished': formData.furnished,
                 'facilities': formData.facilities,
             }
             const url = `${host}/api/property/create`;
@@ -224,83 +220,37 @@ const CreateProperty: React.FC = (props: any) => {
                             </div>
                         </div>
                     </div>
-                    <div className="pfp-multi">
-                        <div className="pet-furnished-photo">
-                            <div className="pet label">
+                    <div className="facilities">
+                        {facilityOptions.map((facility) => (
+                            <div className="label" key={facility}>
                                 <div className="label-text">
-                                    Pet-Friendly:
+                                    {facility}:
                                 </div>
                                 <div className="lable-input">
-                                    <input type="checkbox" name="petFriendly" checked={formData.petFriendly} onChange={handleChange} />
+                                    <input type="checkbox" name={facility} checked={formData.facilities.includes(facility)} onChange={handleChange} />
                                 </div>
                             </div>
-                            <div className="furnished label">
-                                <div className="label-text">
-                                    Furnished:
-                                </div>
-                                <div className="lable-input">
-                                    <input type="checkbox" name="furnished" checked={formData.furnished} onChange={handleChange} />
-                                </div>
-                            </div>
-                            <div className="photo label">
-                                <div className="label-text">
-                                    Property Photo:
-                                    <span className="required"> *</span>
-                                </div>
-                                <div className="lable-input">
-                                    <input type="file" name="propertyPhoto" accept="image/*" onChange={handleFileChange} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="multi">
-                            <div className="input-box label">
-                                <div className="label-text">
-                                    Select Available Facilites: (if any)
-                                </div>
-                                <div className="label-input">
-                                    <select
-                                        name="facility"
-                                        value={formData.facility}
-                                        onChange={handleMultiInputChange}
-                                        style={{ height: '31px' }}
-                                    >
-                                        <option value="">Select Option</option>
-                                        {facilityOptions.map((option, index) => (
-                                            <option key={index} value={option}>
-                                                {option}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="add-button">
-                                    <button type="button" onClick={handleMultiInputAdd}>
-                                        Add
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="display-box label">
-                                <div className="label-text">
-                                    Selected Facilities:
-                                </div>
-                                <div className="label-input">
-                                    <textarea
-                                        readOnly
-                                        placeholder="No Facilities Added"
-                                        style={{ height: '2rem', width: '16rem' }}
-                                        value={formData.facilities.join(", ")}
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                        ))}
                     </div>
-                    <div className="submit">
-                        <button type="submit" className="submit-button">
-                            Submit
-                        </button>
+                    <div className="upload-submit">
+                        <div className="photo label">
+                            <div className="label-text">
+                                Property Photo:
+                                <span className="required"> *</span>
+                            </div>
+                            <div className="lable-input">
+                                <input type="file" name="propertyPhoto" accept="image/*" onChange={handleFileChange} />
+                            </div>
+                        </div>
+                        <div className="submit">
+                            <button type="submit" className="submit-button">
+                                Submit
+                            </button>
+                        </div>
                     </div>
                 </form>
-            </div >
-        </div >
+            </div>
+        </div>
     );
 };
 
