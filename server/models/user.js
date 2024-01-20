@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
 	password: { type: String, required: true },
-	properties: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Property' }],
+	properties: [{ type: mongoose.Schema.Types.ObjectId, ref: 'property' }],
 	role: { type: String, enum: ['user', 'admin'], default: 'user' },
 });
 

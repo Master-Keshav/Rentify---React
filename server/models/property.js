@@ -23,10 +23,10 @@ const propertySchema = new mongoose.Schema({
         required: true,
         enum: ["apartment", "house"],
     },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
 });
 
-const Property = mongoose.model("Property", propertySchema);
+const Property = mongoose.model("property", propertySchema);
 
 const validateProperty = (property) => {
     const schema = Joi.object({

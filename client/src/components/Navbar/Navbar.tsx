@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
+
 import { AnimatePresence, motion } from 'framer-motion';
 
 import Dropdown from './Dropdown';
@@ -7,7 +10,8 @@ import './Navbar.scss';
 
 interface NavbarProps {
     handleLogout: () => void,
-    isOpen: boolean
+    isOpen: boolean,
+    user: any
 }
 
 const Navbar: React.FC<NavbarProps> = (props) => {
@@ -35,28 +39,31 @@ const Navbar: React.FC<NavbarProps> = (props) => {
         },
     };
 
+    const user = props.user
     return (
         <div className="navbar">
-            <div className="logo">
-                <AnimatePresence>
-                    {!isOpen && (
-                        <motion.h1
-                            variants={showAnimation}
-                            initial="hidden"
-                            animate="show"
-                            exit="hidden"
-                        >
-                            <img src={logo} alt="Rentify" />
-                        </motion.h1>
-                    )}
-                </AnimatePresence>
-            </div>
+            <Link to='/'>
+                <div className="logo">
+                    <AnimatePresence>
+                        {!isOpen && (
+                            <motion.h1
+                                variants={showAnimation}
+                                initial="hidden"
+                                animate="show"
+                                exit="hidden"
+                            >
+                                <img src={logo} alt="Rentify" />
+                            </motion.h1>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </Link>
             <div className="user">
                 <div className="user-email">
-                    keshavvyas484
+                    {user.firstName} {user.lastName}
                 </div>
                 <div className="user-photo" onClick={handleDropdownToggle}>
-                    <img src={logo} alt="Profile" className="profile-photo" />
+                    <img src={user.avatar} alt="Profile" className="profile-photo" />
                     <div className="dropdown-menu">
                         <Dropdown isOpen={isDropdownOpen} onClose={() => setDropdownOpen(false)}>
                             <ul>
@@ -72,4 +79,10 @@ const Navbar: React.FC<NavbarProps> = (props) => {
     );
 };
 
-export default Navbar;
+const mapStateToProps = (state: any) => {
+    return {
+        user: state.user.user,
+    };
+};
+
+export default connect(mapStateToProps)(Navbar);

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
+
 import axios from 'axios';
 import { MdAddchart } from "react-icons/md";
 import { TiLocationArrow } from "react-icons/ti";
-import { Link } from "react-router-dom";
 
 interface SidebarProps {
     user: String,
@@ -11,11 +12,10 @@ interface SidebarProps {
 const Properties: React.FC<SidebarProps> = (props) => {
     const host = import.meta.env.VITE_API_HOST as string;
     const user = props.user
-    const [allProperties, setAllProperties] = useState([])
+    const [allProperties, setAllProperties]: any = useState([])
     useEffect(() => {
         const fetchUserProperties = async () => {
             try {
-                //// const url = `${host}/api/property/${user}`;
                 const url = `${host}/api/property`;
                 const { data: resp } = await axios.get(url);
                 setAllProperties(resp.properties);
@@ -27,7 +27,6 @@ const Properties: React.FC<SidebarProps> = (props) => {
         fetchUserProperties();
     }, [user]);
 
-    console.log(allProperties)
     return (
         <>
             <div className="container">
@@ -46,50 +45,54 @@ const Properties: React.FC<SidebarProps> = (props) => {
                 </div>
                 <div className="properties">
                     {allProperties.map((property: any) => (
-                        <div className="card">
-                            <div className="image">
-                                <img src={property.imageURL} alt="Property Image" />
-                            </div>
-                            <div className="row desc-price">
-                                <div className="description">
-                                    Rentione, Villa
+                        <Link to={`/properties/${allProperties[0]?._id}`}>
+                            <div className="card">
+                                <div className="image">
+                                    <img src={property.imageURL} alt="Property Image" />
                                 </div>
-                                <div className="price">
-                                    $5000
+                                <div className="row desc-price">
+                                    <div className="description">
+                                        {property.name}
+                                    </div>
+                                    <div className="price">
+                                        ${property.price}
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <span className="icon">
+                                        <TiLocationArrow />
+                                    </span>
+                                    <div className="text">
+                                        {property.location}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="row">
-                                <span className="icon">
-                                    <TiLocationArrow />
-                                </span>
-                                <div className="text">
-                                    Banglore
-                                </div>
-                            </div>
-                        </div>
+                        </Link>
                     ))}
                     {allProperties.map((property: any) => (
-                        <div className="card">
-                            <div className="image">
-                                <img src={property.imageURL} alt="Property Image" />
-                            </div>
-                            <div className="row desc-price">
-                                <div className="description">
-                                    Rentione, Villa
+                        <Link to={`/properties/${allProperties[0]?._id}`}>
+                            <div className="card">
+                                <div className="image">
+                                    <img src={property.imageURL} alt="Property Image" />
                                 </div>
-                                <div className="price">
-                                    $5000
+                                <div className="row desc-price">
+                                    <div className="description">
+                                        {property.name}
+                                    </div>
+                                    <div className="price">
+                                        ${property.price}
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <span className="icon">
+                                        <TiLocationArrow />
+                                    </span>
+                                    <div className="text">
+                                        {property.location}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="row">
-                                <span className="icon">
-                                    <TiLocationArrow />
-                                </span>
-                                <div className="text">
-                                    Banglore
-                                </div>
-                            </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>

@@ -13,17 +13,14 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:userId", async (req, res) => {
+router.get("/:id", async (req, res) => {
     try {
-        const userId = req.params.userId;
-
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+        const propertyId = req.params.id;
+        const property = await Property.findById(propertyId).populate('user').exec()
+        if (!property) {
+            return res.status(404).json({ message: 'Property not found' });
         }
-
-        const properties = await Property.find({ user: userId });
-        res.json({ properties });
+        res.json({ property });
     } catch (error) {
         console.error('Error fetching user properties:', error);
         res.status(500).json({ message: 'Internal Server Error' });
@@ -62,6 +59,7 @@ router.post("/create", async (req, res) => {
         });
 
         await property.save();
+        await User.findByIdAndUpdate(user, { $push: { properties: property._id } });
 
         res.status(201).json({ message: "Property added successfully" });
     } catch (error) {

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+
 import axios from "axios";
 
 import { setUser } from '../../actions/userActions';
-
 import Agencies from '../../pages/Agencies'
 import CreateProperty from '../../pages/CreateProperty';
 import Dashboard from '../../pages/Dashboard';
 import Messages from '../../pages/Messages';
 import Navbar from '../Navbar/Navbar';
 import Properties from '../../pages/Properties';
+import PropertyDetails from "../../pages/PropertyDetails";
 import Reviews from '../../pages/Reviews';
 import SideBar from '../SideBar/Sidebar';
 import User from '../../pages/User';
@@ -67,6 +68,7 @@ const Home: React.FC = (props: any) => {
                             <Route path="/" element={<Dashboard />} />
                             <Route path="/properties" element={<Properties user={user_id} />} />
                             <Route path="/properties/create" element={<CreateProperty user={user_id} />} />
+                            <Route path="/properties/:id" element={<PropertyDetails />} />
                             <Route path="/agencies" element={<Agencies />} />
                             <Route path="/reviews" element={<Reviews />} />
                             <Route path="/user" element={<User />} />
