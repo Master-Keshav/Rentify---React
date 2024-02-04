@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
 	lastName: { type: String, required: true },
 	password: { type: String, required: true },
 	properties: [{ type: mongoose.Schema.Types.ObjectId, ref: 'property' }],
-	role: { type: String, enum: ['user', 'admin'], default: 'user' },
+	role: { type: String, enum: ['admin', 'agent', 'user'], default: 'user' },
 });
 
 userSchema.methods.generateAuthToken = function () {

@@ -13,6 +13,30 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.post("/create", async (req, res) => {
+    try {
+        const { error } = validateProperty(req.body);
+        if (error) {
+            return res.status(400).json({ error: error.details[0].message });
+        }
+
+        const { user, name, description, type, price, location, imageURL, phone, facilities } = req.body;
+        const property = new Property({ user, name, description, type, price, location, imageURL, phone, facilities });
+        await property.save();
+
+        await User.findByIdAndUpdate(user, {
+            $push: { properties: property._id },
+            $set: { role: 'agent' },
+        });
+
+        res.status(201).json({ message: "Property added successfully" });
+    } catch (error) {
+        console.error("Error adding property:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
 router.get("/:id", async (req, res) => {
     try {
         const propertyId = req.params.id;
@@ -24,47 +48,6 @@ router.get("/:id", async (req, res) => {
     } catch (error) {
         console.error('Error fetching user properties:', error);
         res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
-
-router.post("/create", async (req, res) => {
-    try {
-        const { error } = validateProperty(req.body);
-        if (error) {
-            return res.status(400).json({ error: error.details[0].message });
-        }
-
-        const {
-            user,
-            name,
-            description,
-            type,
-            price,
-            location,
-            imageURL,
-            phone,
-            facilities,
-        } = req.body;
-
-        const property = new Property({
-            user,
-            name,
-            description,
-            type,
-            price,
-            location,
-            imageURL,
-            phone,
-            facilities,
-        });
-
-        await property.save();
-        await User.findByIdAndUpdate(user, { $push: { properties: property._id } });
-
-        res.status(201).json({ message: "Property added successfully" });
-    } catch (error) {
-        console.error("Error adding property:", error);
-        res.status(500).json({ error: "Internal Server Error" });
     }
 });
 

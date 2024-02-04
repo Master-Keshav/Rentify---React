@@ -5,11 +5,9 @@ import { BiSearch } from 'react-icons/bi';
 import { FaBars, FaUser } from 'react-icons/fa';
 import { IoMdPeople } from "react-icons/io";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { MdMessage } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { TbBuildingPavilion } from "react-icons/tb";
-import { VscOpenPreview } from "react-icons/vsc";
 
 import logo from '../../assets/logo.png';
 import './Sidebar.scss';
@@ -20,52 +18,43 @@ interface RouteItem {
     icon: React.ReactNode;
 }
 
-const routes: RouteItem[] = [
-    {
-        path: '/',
-        name: 'Dashboard',
-        icon: <LuLayoutDashboard />,
-    },
-    {
-        path: '/properties',
-        name: 'Properties',
-        icon: <TbBuildingPavilion />,
-    },
-    {
-        path: '/agencies',
-        name: 'Agencies',
-        icon: <IoMdPeople />,
-    },
-    {
-        path: '/reviews',
-        name: 'Reviews',
-        icon: <VscOpenPreview />,
-    },
-    {
-        path: '/messages',
-        name: 'Messages',
-        icon: <MdMessage />,
-    },
-    {
-        path: '/user',
-        name: 'My Profile',
-        icon: <FaUser />,
-    },
-    {
-        path: '/logout',
-        name: 'Logout',
-        icon: <RiLogoutBoxLine />,
-    },
-];
-
 interface SidebarProps {
     isOpen: boolean,
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    userId: string
 }
 
 const SideBar: React.FC<SidebarProps> = (props) => {
-    const { isOpen, setIsOpen } = props;
+    const { isOpen, setIsOpen, userId } = props;
     const toggle = () => setIsOpen(!isOpen);
+
+    const routes: RouteItem[] = [
+        {
+            path: '/',
+            name: 'Dashboard',
+            icon: <LuLayoutDashboard />,
+        },
+        {
+            path: '/properties',
+            name: 'Properties',
+            icon: <TbBuildingPavilion />,
+        },
+        {
+            path: '/agents',
+            name: 'Agents',
+            icon: <IoMdPeople />,
+        },
+        {
+            path: `/user/${userId}`,
+            name: 'My Profile',
+            icon: <FaUser />,
+        },
+        {
+            path: '/logout',
+            name: 'Logout',
+            icon: <RiLogoutBoxLine />,
+        },
+    ];
 
     const inputAnimation = {
         hidden: {

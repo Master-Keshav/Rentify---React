@@ -1,5 +1,3 @@
-import { Dispatch } from "redux";
-
 export const setUser = (user: any) => {
     return {
         type: "SET_USER",
@@ -7,16 +5,16 @@ export const setUser = (user: any) => {
     };
 };
 
-export const setRole = (role: string | undefined) => {
+export const setAgent = (agent: any) => {
     return {
-        type: "SET_ROLE",
-        payload: role,
+        type: "SET_AGENT",
+        payload: agent,
     };
 };
 
-export const setUserAndRole = (user: any, role: string | undefined) => {
-    return (dispatch: Dispatch) => {
-        dispatch(setUser(user));
-        dispatch(setRole(role));
+export const setAllAgents = (agents: any) => {
+    return {
+        type: "SET_AGENTS",
+        payload: agents,
     };
 };

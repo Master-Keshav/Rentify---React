@@ -18,7 +18,8 @@ const Properties: React.FC<SidebarProps> = (props) => {
             try {
                 const url = `${host}/api/property`;
                 const { data: resp } = await axios.get(url);
-                setAllProperties(resp.properties);
+                if (resp.properties) setAllProperties(resp.properties);
+                else console.log("Error fetching properties")
             } catch (error) {
                 console.error('Error fetching user properties:', error);
             }
@@ -44,9 +45,9 @@ const Properties: React.FC<SidebarProps> = (props) => {
                     </Link>
                 </div>
                 <div className="properties">
-                    {allProperties.map((property: any) => (
-                        <Link to={`/properties/${allProperties[0]?._id}`}>
-                            <div className="card">
+                    {allProperties && allProperties.map((property: any, index: number) => (
+                        <div className="card" key={index}>
+                            <Link to={`/properties/${property?._id}`}>
                                 <div className="image">
                                     <img src={property.imageURL} alt="Property Image" />
                                 </div>
@@ -66,12 +67,12 @@ const Properties: React.FC<SidebarProps> = (props) => {
                                         {property.location}
                                     </div>
                                 </div>
-                            </div>
-                        </Link>
+                            </Link>
+                        </div>
                     ))}
-                    {allProperties.map((property: any) => (
-                        <Link to={`/properties/${allProperties[0]?._id}`}>
-                            <div className="card">
+                    {allProperties.map((property: any, index: number) => (
+                        <div className="card" key={index}>
+                            <Link to={`/properties/${allProperties[0]?._id}`}>
                                 <div className="image">
                                     <img src={property.imageURL} alt="Property Image" />
                                 </div>
@@ -91,11 +92,11 @@ const Properties: React.FC<SidebarProps> = (props) => {
                                         {property.location}
                                     </div>
                                 </div>
-                            </div>
-                        </Link>
+                            </Link>
+                        </div>
                     ))}
                 </div>
-            </div>
+            </div >
         </>
     );
 };

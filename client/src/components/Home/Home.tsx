@@ -5,17 +5,16 @@ import { Route, Routes } from 'react-router-dom';
 import axios from "axios";
 
 import { setUser } from '../../actions/userActions';
-import Agencies from '../../pages/Agencies'
+import Agent from '../../pages/Agent';
+import AgentsList from '../../pages/AgentsList'
 import CreateProperty from '../../pages/CreateProperty';
 import Dashboard from '../../pages/Dashboard';
 import Messages from '../../pages/Messages';
 import Navbar from '../Navbar/Navbar';
 import Properties from '../../pages/Properties';
 import PropertyDetails from "../../pages/PropertyDetails";
-import Reviews from '../../pages/Reviews';
 import SideBar from '../SideBar/Sidebar';
-import User from '../../pages/User';
-import './Home.css';
+import './index.css';
 
 const Home: React.FC = (props: any) => {
     const host = import.meta.env.VITE_API_HOST as string;
@@ -45,7 +44,7 @@ const Home: React.FC = (props: any) => {
         window.location.href = "/"
     };
 
-    const user_id = props.user._id
+    const userId = props.user._id
 
     return (
         <>
@@ -54,6 +53,7 @@ const Home: React.FC = (props: any) => {
                     <SideBar
                         isOpen={isOpen}
                         setIsOpen={setIsOpen}
+                        userId={userId}
                     />
                 </div>
                 <div className="page-container">
@@ -66,12 +66,12 @@ const Home: React.FC = (props: any) => {
                     <div className="page">
                         <Routes>
                             <Route path="/" element={<Dashboard />} />
-                            <Route path="/properties" element={<Properties user={user_id} />} />
-                            <Route path="/properties/create" element={<CreateProperty user={user_id} />} />
+                            <Route path="/properties" element={<Properties user={userId} />} />
+                            <Route path="/properties/create" element={<CreateProperty user={userId} />} />
                             <Route path="/properties/:id" element={<PropertyDetails />} />
-                            <Route path="/agencies" element={<Agencies />} />
-                            <Route path="/reviews" element={<Reviews />} />
-                            <Route path="/user" element={<User />} />
+                            <Route path="/agents" element={<AgentsList />} />
+                            <Route path="/agent/:id" element={<Agent />} />
+                            <Route path={`/user/:id`} element={<Agent />} />
                             <Route path="/messages" element={<Messages />} />
                         </Routes>
                     </div>

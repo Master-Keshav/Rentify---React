@@ -298,6 +298,7 @@
                 margin: 0.25rem 0;
                 text-align: center;
                 justify-content: start;
+                color: black;
 
                 .icon {
                     color: red;
@@ -389,9 +390,10 @@
                 gap: 1rem;
                 align-items: center;
                 flex-grow: 1;
-                padding: 1rem;
 
                 .card {
+                    padding: 1rem;
+                    color: black;
                     display: flex;
                     flex-direction: column;
                     text-align: center;
@@ -443,7 +445,6 @@
                     display: flex;
                     justify-content: center;
                     margin: 1rem 0 0;
-                    flex: 1;
 
                     .rate-button {
                         cursor: pointer;
@@ -461,6 +462,139 @@
                     }
                 }
 
+            }
+        }
+    }
+
+    .agent-card {
+        background-color: white;
+        margin: 1rem 2rem;
+        padding: 1rem;
+        display: flex;
+        flex-direction: row;
+        border-radius: 0.8rem;
+        color: black;
+
+        .img {
+            width: 8rem;
+            margin-right: 3rem;
+
+            img {
+                width: 100%;
+                border-radius: 2rem;
+            }
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            flex-grow: 1;
+
+            .bolder {
+                font-weight: bolder;
+                color: #03293c;
+            }
+
+            .upper {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+
+                .agent {
+                    background-color: #4ce5f3;
+                    padding: 3px;
+                    border-radius: 20%;
+                }
+            }
+
+            .lower {
+                display: flex;
+                gap: 3rem;
+            }
+        }
+    }
+
+    .agent-profile {
+        background-color: white;
+        margin: 1rem 2rem;
+        padding: 1rem 2rem;
+        display: flex;
+        flex-direction: row;
+        border-radius: 0.8rem;
+        color: black;
+        gap: 8rem;
+
+        .avatar {
+            width: 22rem;
+
+            img {
+                width: 100%;
+                border-radius: 2rem;
+            }
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            justify-content: space-around;
+
+            .field {
+                font-weight: bolder;
+                color: #0fa3b1;
+            }
+
+            .name {
+                color: #db3434;
+                font-size: 3rem;
+            }
+        }
+    }
+
+    .agent-property {
+        background-color: white;
+        margin: 1rem 2rem;
+        padding: 1rem 2rem;
+        display: flex;
+        flex-direction: column;
+        border-radius: 0.8rem;
+        color: black;
+
+        .title {
+            text-align: center;
+            align-items: center;
+        }
+
+        .properties {
+            display: flex;
+            width: 100%;
+            gap: 3rem;
+
+            .property-card {
+                display: flex;
+                flex-direction: column;
+                color: black;
+
+                .img {
+                    width: 10rem;
+
+                    img {
+                        width: 100%;
+                        border-radius: 1rem;
+                    }
+                }
+
+                .field {
+                    width: fit-content;
+                }
+
+                .price {
+                    background-color: #4ce5f3;
+                    padding: 3px;
+                    width: fit-content;
+                    border-radius: 20%;
+                }
             }
         }
     }
