@@ -10,7 +10,7 @@ import AgentsList from '../../pages/AgentsList'
 import CreateProperty from '../../pages/CreateProperty';
 import Dashboard from '../../pages/Dashboard';
 import LogoutModal from "../LogoutModal/LogoutModal";
-import Messages from '../../pages/Messages';
+import LoaderModal from "../LoaderModal/LoaderModal";
 import Navbar from '../Navbar/Navbar';
 import Properties from '../../pages/Properties';
 import PropertyDetails from "../../pages/PropertyDetails";
@@ -20,9 +20,14 @@ import './index.css';
 const Home: React.FC = (props: any) => {
     const host = import.meta.env.VITE_API_HOST as string;
 
+    const [isOpen, setIsOpen] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         const fetchUser = async () => {
             try {
+                setIsLoading(true);
                 const url = `${host}/api/user`;
                 const response = await axios.get(url, {
                     headers: {
@@ -32,14 +37,15 @@ const Home: React.FC = (props: any) => {
                 props.setUser(response.data);
             } catch (error) {
                 console.error('Error fetching user:', error);
+            } finally {
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 2000);
             }
         };
 
         fetchUser();
     }, []);
-
-    const [isOpen, setIsOpen] = useState(false);
-    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const handleLogout = () => {
         localStorage.removeItem("token")
@@ -70,13 +76,12 @@ const Home: React.FC = (props: any) => {
                     <div className="page">
                         <Routes>
                             <Route path="/" element={<Dashboard />} />
-                            <Route path="/properties" element={<Properties user={userId} />} />
-                            <Route path="/properties/create" element={<CreateProperty user={userId} />} />
-                            <Route path="/properties/:id" element={<PropertyDetails />} />
-                            <Route path="/agents" element={<AgentsList />} />
-                            <Route path="/agent/:id" element={<Agent />} />
-                            <Route path={`/user/:id`} element={<Agent />} />
-                            <Route path="/messages" element={<Messages />} />
+                            <Route path="/properties" element={<Properties user={userId} setIsLoading={setIsLoading} />} />
+                            <Route path="/properties/create" element={<CreateProperty user={userId} setIsLoading={setIsLoading} />} />
+                            <Route path="/properties/:id" element={<PropertyDetails setIsLoading={setIsLoading} />} />
+                            <Route path="/agents" element={<AgentsList setIsLoading={setIsLoading} />} />
+                            <Route path="/agent/:id" element={<Agent setIsLoading={setIsLoading} />} />
+                            <Route path={`/user/:id`} element={<Agent setIsLoading={setIsLoading} />} />
                         </Routes>
                     </div>
                 </div>
@@ -86,6 +91,7 @@ const Home: React.FC = (props: any) => {
                 onClose={() => setShowLogoutModal(false)}
                 handleLogout={handleLogout}
             />
+            <LoaderModal isOpen={isLoading} />
         </>
     );
 };

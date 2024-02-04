@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
 
+import LoaderModal from "../LoaderModal/LoaderModal";
 import "./Login.scss";
 
 type UserData = {
@@ -54,6 +55,7 @@ const Login: React.FC = () => {
 
     const [data, setData] = useState<UserData>({ email: "", password: "" });
     const [error, setError] = useState<string | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         googleLogout();
@@ -68,6 +70,7 @@ const Login: React.FC = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
+            setIsLoading(true);
             const url = `${host}/api/login`;
             const { data: res } = await axios.post(url, data);
             localStorage.setItem("token", res.data.token);
@@ -90,6 +93,10 @@ const Login: React.FC = () => {
                     setError("An unknown error occurred.");
                 }
             }
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 2000);
         }
     };
 
@@ -154,6 +161,7 @@ const Login: React.FC = () => {
                     </Link>
                 </div>
             </div>
+            <LoaderModal isOpen={isLoading} />
         </div>
     );
 };

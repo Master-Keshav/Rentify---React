@@ -5,24 +5,30 @@ import axios from 'axios';
 import { MdAddchart } from 'react-icons/md';
 import { TiLocationArrow } from 'react-icons/ti';
 
-interface SidebarProps {
-    user: String;
+interface PropertiesProps {
+    user: String,
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Properties: React.FC<SidebarProps> = (props) => {
+const Properties: React.FC<PropertiesProps> = (props) => {
     const host = import.meta.env.VITE_API_HOST as string;
-    const user = props.user;
+    const { user, setIsLoading } = props;
     const [allProperties, setAllProperties]: any = useState([]);
 
     useEffect(() => {
         const fetchUserProperties = async () => {
             try {
+                setIsLoading(true);
                 const url = `${host}/api/property`;
                 const { data: resp } = await axios.get(url);
                 if (resp.properties) setAllProperties(resp.properties);
                 else console.log('Error fetching properties');
             } catch (error) {
                 console.error('Error fetching user properties:', error);
+            } finally {
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 2000);
             }
         };
 

@@ -11,9 +11,11 @@ import { setAgent, setProperty } from '../actions/propertyActions';
 const PropertyDetails = (props: any) => {
     const host = import.meta.env.VITE_API_HOST as string;
     const { id } = useParams()
+    const { setIsLoading } = props;
     useEffect(() => {
         const fetchPropertyDetails = async () => {
             try {
+                setIsLoading(true);
                 const url = `${host}/api/property/${id}`;
                 const { data: resp } = await axios.get(url);
                 const property = resp.property
@@ -22,6 +24,10 @@ const PropertyDetails = (props: any) => {
                 props.setAgent(user)
             } catch (error) {
                 console.error('Error fetching user properties:', error);
+            } finally {
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 2000);
             }
         };
 

@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios, { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import LoaderModal from "../LoaderModal/LoaderModal";
 import "./Signup.scss";
 
 type UserData = {
@@ -21,12 +22,14 @@ const Signup: React.FC = () => {
     });
 
     const [error, setError] = useState<string | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const host = import.meta.env.VITE_API_HOST as string;
 
     const generateRandomAvatar = async () => {
         try {
+            setIsLoading(true);
             let imageUrl;
             let imageData;
             do {
@@ -39,6 +42,10 @@ const Signup: React.FC = () => {
         } catch (error) {
             console.error("Error fetching random image:", error);
             return '';
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 2000);
         }
     };
 
@@ -49,6 +56,7 @@ const Signup: React.FC = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
+            setIsLoading(true);
             const url = `${host}/api/signup`;
             const avatarURL = await generateRandomAvatar()
             data.avatar = avatarURL
@@ -72,6 +80,10 @@ const Signup: React.FC = () => {
                     }
                 }
             }
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 2000);
         }
     };
 
@@ -135,6 +147,7 @@ const Signup: React.FC = () => {
                     </form>
                 </div>
             </div>
+            <LoaderModal isOpen={isLoading} />
         </div>
     );
 };

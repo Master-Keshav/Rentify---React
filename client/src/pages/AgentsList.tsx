@@ -7,16 +7,22 @@ import { motion } from "framer-motion";
 
 const AgentsList = (props: any) => {
     const host = import.meta.env.VITE_API_HOST as string;
+    const { setIsLoading } = props;
 
     useEffect(() => {
         const getAllAgents = async () => {
             try {
+                setIsLoading(true);
                 const url = `${host}/api/user/agents`;
                 const { data: resp } = await axios.get(url);
                 const agents = resp.agents;
                 props.setAgents(agents);
             } catch (error) {
                 console.error("Error fetching user properties:", error);
+            } finally {
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 2000);
             }
         };
         getAllAgents();

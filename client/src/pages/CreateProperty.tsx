@@ -3,6 +3,7 @@ import axios from "axios";
 
 interface CreatePropertyProps {
     user: String,
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CreateProperty: React.FC<CreatePropertyProps> = (props) => {
@@ -21,7 +22,7 @@ const CreateProperty: React.FC<CreatePropertyProps> = (props) => {
         imageURL: '',
     });
 
-    const user_id = props.user
+    const { user: user_id, setIsLoading } = props
     const [imageFile, setImageFile] = useState<File>();
     const facilityOptions = ["Pet Friendly", "Furnished", "Park", "School", "Hospital", "Supermarket", "Security Guard", "Surveillance Camera"];
 
@@ -98,6 +99,7 @@ const CreateProperty: React.FC<CreatePropertyProps> = (props) => {
         e.preventDefault();
         const imageURL = await handleImgBBUpload();
         try {
+            setIsLoading(true);
             let data = {
                 'user': user_id,
                 'name': formData.propertyName,
@@ -112,9 +114,12 @@ const CreateProperty: React.FC<CreatePropertyProps> = (props) => {
             const url = `${host}/api/property/create`;
             const { data: res } = await axios.post(url, data);
             console.log("API response:", res.message);
-            // Optionally, you can reset the form or perform other actions after successful submission
         } catch (error) {
             console.error("Error submitting form:", error);
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 2000);
         }
     };
 

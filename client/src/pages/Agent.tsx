@@ -14,16 +14,22 @@ const propertyFields = ['name', 'location', 'price'];
 const Agent = (props: any) => {
     const host = import.meta.env.VITE_API_HOST as string;
     const { id } = useParams();
+    const { setIsLoading } = props;
 
     useEffect(() => {
         const getAgentDetails = async () => {
             try {
+                setIsLoading(true);
                 const url = `${host}/api/user/${id}`;
                 const { data: resp } = await axios.get(url);
                 const agent = resp.agent;
                 props.setAgent(agent);
             } catch (error) {
                 console.error('Error fetching user properties:', error);
+            } finally {
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 2000);
             }
         };
         getAgentDetails();
