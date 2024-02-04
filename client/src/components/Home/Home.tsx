@@ -9,6 +9,7 @@ import Agent from '../../pages/Agent';
 import AgentsList from '../../pages/AgentsList'
 import CreateProperty from '../../pages/CreateProperty';
 import Dashboard from '../../pages/Dashboard';
+import LogoutModal from "../LogoutModal/LogoutModal";
 import Messages from '../../pages/Messages';
 import Navbar from '../Navbar/Navbar';
 import Properties from '../../pages/Properties';
@@ -38,6 +39,7 @@ const Home: React.FC = (props: any) => {
     }, []);
 
     const [isOpen, setIsOpen] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const handleLogout = () => {
         localStorage.removeItem("token")
@@ -54,6 +56,7 @@ const Home: React.FC = (props: any) => {
                         isOpen={isOpen}
                         setIsOpen={setIsOpen}
                         userId={userId}
+                        setShowLogoutModal={setShowLogoutModal}
                     />
                 </div>
                 <div className="page-container">
@@ -61,6 +64,7 @@ const Home: React.FC = (props: any) => {
                         <Navbar
                             handleLogout={handleLogout}
                             isOpen={isOpen}
+                            setShowLogoutModal={setShowLogoutModal}
                         />
                     </div>
                     <div className="page">
@@ -77,6 +81,11 @@ const Home: React.FC = (props: any) => {
                     </div>
                 </div>
             </div>
+            <LogoutModal
+                isOpen={showLogoutModal}
+                onClose={() => setShowLogoutModal(false)}
+                handleLogout={handleLogout}
+            />
         </>
     );
 };

@@ -11,11 +11,12 @@ import './Navbar.scss';
 interface NavbarProps {
     handleLogout: () => void,
     isOpen: boolean,
-    user: any
+    user: any,
+    setShowLogoutModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Navbar: React.FC<NavbarProps> = (props) => {
-    const { handleLogout, isOpen } = props
+    const { setShowLogoutModal, isOpen } = props
     const [isDropdownOpen, setDropdownOpen] = useState(false);
 
     const handleDropdownToggle = () => {
@@ -69,7 +70,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
                             <ul>
                                 <li>Option 1</li>
                                 <li>Option 2</li>
-                                <li onClick={handleLogout}>Logout</li>
+                                <li onClick={() => setShowLogoutModal(true)}>Logout</li>
                             </ul>
                         </Dropdown>
                     </div>

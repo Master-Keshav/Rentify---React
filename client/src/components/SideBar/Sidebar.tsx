@@ -21,11 +21,12 @@ interface RouteItem {
 interface SidebarProps {
     isOpen: boolean,
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    userId: string
+    userId: string,
+    setShowLogoutModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SideBar: React.FC<SidebarProps> = (props) => {
-    const { isOpen, setIsOpen, userId } = props;
+    const { isOpen, setIsOpen, userId, setShowLogoutModal } = props;
     const toggle = () => setIsOpen(!isOpen);
 
     const routes: RouteItem[] = [
@@ -48,11 +49,6 @@ const SideBar: React.FC<SidebarProps> = (props) => {
             path: `/user/${userId}`,
             name: 'My Profile',
             icon: <FaUser />,
-        },
-        {
-            path: '/logout',
-            name: 'Logout',
-            icon: <RiLogoutBoxLine />,
         },
     ];
 
@@ -156,6 +152,12 @@ const SideBar: React.FC<SidebarProps> = (props) => {
                         </AnimatePresence>
                     </NavLink>
                 ))}
+                <div className="link" onClick={() => setShowLogoutModal(true)}>
+                    <div className="icon">
+                        <RiLogoutBoxLine />
+                    </div>
+                    {isOpen && <div className="text">Logout</div>}
+                </div>
             </section>
         </div>
     );
