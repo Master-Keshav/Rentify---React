@@ -52,7 +52,6 @@
     display: none;
 }
 
-
 .routes {
     display: flex;
     flex-direction: column;
@@ -64,6 +63,7 @@
         color: #e5e5e5;
         line-height: 3rem;
         transition: 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+        cursor: pointer;
 
         &:hover {
             border-right: 4px solid #e5e5e5;
